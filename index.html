@@ -105,7 +105,6 @@
           const contentRes = await fetch(file.download_url);
           const rawText = await contentRes.text();
 
-          // Split Frontmatter and Body Content
           const parts = rawText.split('---');
           let frontmatter = {};
           let bodyContent = '';
@@ -138,7 +137,7 @@
         // Sort newest first
         allReviewsData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        // Render Hero Banner with newest review
+        // Render Hero Banner using index reference (index 0 is newest)
         if (allReviewsData.length > 0) {
           const latest = allReviewsData[0];
           heroSection.innerHTML = `
@@ -152,12 +151,12 @@
                 ${latest.subtitle ? `<p class="font-newsreader italic text-slate-300 text-lg mt-2">${latest.subtitle}</p>` : ''}
                 ${latest.summary ? `<p class="text-slate-400 text-sm mt-4 leading-relaxed line-clamp-3">${latest.summary}</p>` : ''}
                 <div class="mt-8">
-                  <button onclick="openReviewModal(${escapeHtml(JSON.stringify(latest))})" class="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm rounded-full transition shadow-lg shadow-cyan-500/20 cursor-pointer">
+                  <button onclick="openReviewByIndex(0)" class="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm rounded-full transition shadow-lg shadow-cyan-500/20 cursor-pointer">
                     Read Full Review →
                   </button>
                 </div>
               </div>
-              <div class="w-full lg:w-1/2 h-72 lg:h-[420px] relative">
+              <div class="w-full lg:w-1/2 h-72 lg:h-[420px] relative cursor-pointer" onclick="openReviewByIndex(0)">
                 ${latest.image ? `<img src="${latest.image}" alt="${latest.title}" class="w-full h-full object-cover">` : '<div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-600">NO IMAGE</div>'}
                 <div class="absolute inset-0 bg-gradient-to-r from-[#05070f] via-transparent to-transparent lg:block hidden"></div>
               </div>
@@ -180,10 +179,13 @@
       }
 
       grid.innerHTML = '';
-      reviews.forEach((review, index) => {
+      reviews.forEach((review) => {
+        // Find its true index in the master array so modal opens correctly even when filtered
+        const originalIndex = allReviewsData.findIndex(r => r.title === review.title);
+
         const card = document.createElement('article');
         card.className = "bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition flex flex-col justify-between shadow-xl cursor-pointer";
-        card.onclick = () => openReviewModal(review);
+        card.onclick = () => openReviewByIndex(originalIndex);
         
         card.innerHTML = `
           <div>
@@ -204,7 +206,10 @@
       });
     }
 
-    function openReviewModal(review) {
+    function openReviewByIndex(index) {
+      const review = allReviewsData[index];
+      if (!review) return;
+
       const modal = document.getElementById('review-modal');
       const content = document.getElementById('modal-content');
       
@@ -225,10 +230,6 @@
 
     function closeModal() {
       document.getElementById('review-modal').classList.add('hidden');
-    }
-
-    function escapeHtml(str) {
-      return JSON.stringify(str).replace(/"/g, '&quot;');
     }
 
     function filterReviews(category) {
