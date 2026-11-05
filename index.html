@@ -71,6 +71,14 @@
     </div>
   </main>
 
+  <!-- Full Review Reader Modal -->
+  <div id="review-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 relative shadow-2xl">
+      <button onclick="closeModal()" class="absolute top-6 right-6 w-10 h-10 bg-slate-800 hover:bg-cyan-500 hover:text-black text-white rounded-full flex items-center justify-center font-bold transition">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
   <script>
     let allReviewsData = [];
 
@@ -97,18 +105,24 @@
           const contentRes = await fetch(file.download_url);
           const rawText = await contentRes.text();
 
-          const frontmatterMatch = rawText.match(/^---\n([\s\S]*?)\n---/);
-          if (!frontmatterMatch) continue;
+          // Split Frontmatter and Body Content
+          const parts = rawText.split('---');
+          let frontmatter = {};
+          let bodyContent = '';
 
-          const frontmatter = {};
-          frontmatterMatch[1].split('\n').forEach(line => {
-            const colonIndex = line.indexOf(':');
-            if (colonIndex !== -1) {
-              const key = line.slice(0, colonIndex).trim();
-              const value = line.slice(colonIndex + 1).trim().replace(/^['"]|['"]$/g, '');
-              frontmatter[key] = value;
-            }
-          });
+          if (parts.length >= 3) {
+            parts[1].split('\n').forEach(line => {
+              const colonIndex = line.indexOf(':');
+              if (colonIndex !== -1) {
+                const key = line.slice(0, colonIndex).trim();
+                const value = line.slice(colonIndex + 1).trim().replace(/^['"]|['"]$/g, '');
+                frontmatter[key] = value;
+              }
+            });
+            bodyContent = parts.slice(2).join('---').trim();
+          } else {
+            bodyContent = rawText;
+          }
 
           allReviewsData.push({
             title: frontmatter.title || 'Untitled',
@@ -116,14 +130,15 @@
             subtitle: frontmatter.subtitle || '',
             summary: frontmatter.summary || '',
             image: frontmatter.image || frontmatter.poster || frontmatter.cover || '',
-            date: frontmatter.date || new Date().toISOString()
+            date: frontmatter.date || new Date().toISOString(),
+            body: bodyContent
           });
         }
 
-        // Sort reviews by date descending (newest first)
+        // Sort newest first
         allReviewsData.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        // Render Hero Banner with the newest review
+        // Render Hero Banner with newest review
         if (allReviewsData.length > 0) {
           const latest = allReviewsData[0];
           heroSection.innerHTML = `
@@ -137,9 +152,9 @@
                 ${latest.subtitle ? `<p class="font-newsreader italic text-slate-300 text-lg mt-2">${latest.subtitle}</p>` : ''}
                 ${latest.summary ? `<p class="text-slate-400 text-sm mt-4 leading-relaxed line-clamp-3">${latest.summary}</p>` : ''}
                 <div class="mt-8">
-                  <a href="#reviews-grid" class="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm rounded-full transition shadow-lg shadow-cyan-500/20">
+                  <button onclick="openReviewModal(${escapeHtml(JSON.stringify(latest))})" class="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-sm rounded-full transition shadow-lg shadow-cyan-500/20 cursor-pointer">
                     Read Full Review →
-                  </a>
+                  </button>
                 </div>
               </div>
               <div class="w-full lg:w-1/2 h-72 lg:h-[420px] relative">
@@ -165,9 +180,10 @@
       }
 
       grid.innerHTML = '';
-      reviews.forEach(review => {
+      reviews.forEach((review, index) => {
         const card = document.createElement('article');
-        card.className = "bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition flex flex-col justify-between shadow-xl";
+        card.className = "bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition flex flex-col justify-between shadow-xl cursor-pointer";
+        card.onclick = () => openReviewModal(review);
         
         card.innerHTML = `
           <div>
@@ -181,11 +197,38 @@
           </div>
           <div class="px-6 pb-6 pt-2 border-t border-slate-800/40 flex justify-between items-center text-xs text-slate-500">
             <span>Published: ${review.date.slice(0, 10)}</span>
-            <span class="text-cyan-400 font-medium hover:underline cursor-pointer">Read Review →</span>
+            <span class="text-cyan-400 font-medium hover:underline">Read Review →</span>
           </div>
         `;
         grid.appendChild(card);
       });
+    }
+
+    function openReviewModal(review) {
+      const modal = document.getElementById('review-modal');
+      const content = document.getElementById('modal-content');
+      
+      content.innerHTML = `
+        <span class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">${review.category}</span>
+        <h2 class="font-syne text-3xl text-white font-bold mt-2">${review.title}</h2>
+        ${review.subtitle ? `<p class="font-newsreader italic text-slate-300 text-base mt-1">${review.subtitle}</p>` : ''}
+        <span class="text-xs text-slate-500 block mt-2 mb-6">Published: ${review.date.slice(0, 10)}</span>
+        
+        ${review.image ? `<img src="${review.image}" alt="${review.title}" class="w-full h-72 object-cover rounded-2xl mb-6 border border-slate-800">` : ''}
+        
+        <div class="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-sans space-y-4">
+          ${review.body || review.summary || 'No full review text provided.'}
+        </div>
+      `;
+      modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('review-modal').classList.add('hidden');
+    }
+
+    function escapeHtml(str) {
+      return JSON.stringify(str).replace(/"/g, '&quot;');
     }
 
     function filterReviews(category) {
