@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STREAM⚡VERSE — Cinematic Reviews & Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                        serif: ['Newsreader', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        brand: { cyan: '#06B6D4', neon: '#22D3EE', violet: '#A855F7', pink: '#EC4899', dark: '#030712' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
+        .editorial-body p { 
+            font-family: 'Newsreader', Georgia, serif !important; 
+            font-size: 1.15rem !important; 
+            line-height: 1.65 !important; 
+            color: #cbd5e1 !important; 
+            margin-bottom: 1.25rem !important; 
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-950 text-slate-100 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" onclick="switchView('landing')" class="flex items-center gap-3 group cursor-pointer">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-brand-neon flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-bolt text-slate-950 text-xl font-black"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-syne font-extrabold text-2xl tracking-wider text-white">STREAM<span class="text-brand-cyan">⚡</span>VERSE</span>
+                    <span class="text-[10px] tracking-widest text-slate-400 uppercase font-semibold">Cinematic Intelligence</span>
+                </div>
+            </a>
+            
+            <div class="flex items-center gap-4">
+                <a href="/admin/" class="bg-brand-cyan/10 border border-brand-cyan/40 hover:bg-brand-cyan hover:text-slate-950 text-brand-neon px-5 py-2.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/10 cursor-pointer">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Admin Studio Login
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-8">
+        
+        <!-- ================= LANDING PAGE ================= -->
+        <div id="landingView" class="space-y-12">
+            
+            <!-- Hero Spotlight Banner -->
+            <div id="heroSection" class="relative rounded-3xl overflow-hidden border border-slate-800/80 bg-slate-900/40 shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-12">
+                    <div class="lg:col-span-7 p-8 lg:p-12 flex flex-col justify-between space-y-6">
+                        <div class="space-y-4 pt-4">
+                            <h1 id="heroTitle" class="font-syne font-extrabold text-4xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-none"></h1>
+                            <p id="heroSubtitle" class="font-serif italic text-slate-200 text-lg sm:text-xl font-normal pt-2"></p>
+                        </div>
+                        <div class="pt-8 border-t border-slate-800/80">
+                            <button id="heroBtn" onclick="" class="bg-gradient-to-r from-brand-cyan to-brand-neon text-slate-950 font-extrabold px-6 py-3.5 rounded-2xl hover:opacity-90 transition-all flex items-center gap-2 text-sm shadow-lg shadow-cyan-500/20 cursor-pointer">
+                                Read Full Review <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-5 relative min-h-[320px] lg:min-h-full overflow-hidden bg-slate-900">
+                        <img id="heroPoster" src="" alt="Featured Poster" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent lg:bg-gradient-to-r lg:from-slate-950 lg:via-transparent lg:to-transparent"></div>
+                        <div id="heroRating" class="absolute top-4 right-4 bg-slate-950/80 backdrop-blur-md border border-slate-800 px-4 py-2 rounded-2xl text-sm font-extrabold text-amber-400 flex items-center gap-1.5 shadow-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header + Category Filter Tabs -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-5 gap-4">
+                <div>
+                    <h2 class="font-syne font-bold text-3xl text-white tracking-tight">Reviews</h2>
+                    <p class="text-slate-400 text-xs mt-1">Latest critiques across film, TV, and digital media</p>
+                </div>
+
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                    <button onclick="setCategoryFilter('all')" id="tab-all" class="category-tab active-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-brand-cyan/40 bg-brand-cyan text-slate-950 shadow-md cursor-pointer">
+                        All
+                    </button>
+                    <button onclick="setCategoryFilter('Films')" id="tab-Films" class="category-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-700 cursor-pointer">
+                        <i class="fa-solid fa-film mr-1.5 text-brand-cyan"></i> Films
+                    </button>
+                    <button onclick="setCategoryFilter('Series')" id="tab-Series" class="category-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-700 cursor-pointer">
+                        <i class="fa-solid fa-tv mr-1.5 text-brand-cyan"></i> Series
+                    </button>
+                    <button onclick="setCategoryFilter('Documentaries')" id="tab-Documentaries" class="category-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-700 cursor-pointer">
+                        <i class="fa-solid fa-video mr-1.5 text-brand-cyan"></i> Documentaries
+                    </button>
+                    <button onclick="setCategoryFilter('Videos')" id="tab-Videos" class="category-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-700 cursor-pointer">
+                        <i class="fa-solid fa-play mr-1.5 text-brand-cyan"></i> Videos
+                    </button>
+                </div>
+            </div>
+
+            <div id="moviesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+        </div>
+
+        <!-- ================= INSIDE REVIEW DETAIL PAGE ================= -->
+        <div id="reviewView" class="hidden max-w-6xl mx-auto space-y-8">
+            <button onclick="switchView('landing')" class="inline-flex items-center gap-2 text-xs font-bold text-slate-300 hover:text-brand-cyan bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-xl transition-colors cursor-pointer">
+                <i class="fa-solid fa-arrow-left"></i> Back to Reviews
+            </button>
+
+            <!-- Header Block -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 bg-slate-900/80 border border-slate-800 rounded-3xl p-8 sm:p-10 backdrop-blur-sm shadow-2xl items-center">
+                <div class="md:col-span-4">
+                    <img id="reviewPoster" src="" alt="Movie Poster" class="w-full aspect-[2/3] object-cover rounded-2xl border border-slate-800 shadow-xl">
+                </div>
+                <div class="md:col-span-8 space-y-4 flex flex-col justify-center">
+                    <div class="flex flex-wrap items-center gap-3 text-xs font-extrabold text-brand-cyan uppercase tracking-wider">
+                        <span id="reviewCategory" class="px-2.5 py-1 bg-brand-cyan/10 border border-brand-cyan/30 rounded-lg text-brand-neon"></span>
+                        <span>•</span>
+                        <span id="reviewGenre"></span>
+                        <span>•</span>
+                        <span id="reviewYear"></span>
+                    </div>
+                    
+                    <h1 id="reviewTitle" class="font-syne font-extrabold text-4xl sm:text-5xl text-white leading-none"></h1>
+                    
+                    <div class="flex items-center gap-4 pt-1">
+                        <div class="text-amber-400 font-extrabold text-lg inline-block bg-slate-950/60 border border-slate-800 px-3.5 py-1 rounded-xl w-fit" id="reviewRatingScore"></div>
+                        <div class="text-xs font-semibold text-slate-400 flex items-center gap-2 bg-slate-950/40 border border-slate-800/60 px-3 py-1.5 rounded-xl">
+                            <i class="fa-solid fa-user-pen text-brand-cyan"></i>
+                            <span>Reviewed by <strong id="reviewAuthor" class="text-slate-200"></strong></span>
+                        </div>
+                    </div>
+                    
+                    <p id="reviewSubtitle" class="font-serif italic font-normal text-2xl text-slate-100 leading-snug pt-3 border-t border-slate-800/80"></p>
+                    <p id="reviewSummaryText" class="font-serif text-slate-300 text-lg leading-relaxed"></p>
+                </div>
+            </div>
+
+            <!-- Critique Body -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-14 shadow-2xl">
+                <div id="reviewBodyContent" class="editorial-body max-w-4xl mx-auto"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Script Logic -->
+    <script>
+        const defaultReviews = {
+            "wicker": {
+                title: "Wicker",
+                category: "Films",
+                author: "StreamVerse Editor",
+                genre: "Dark Comedy / Romance",
+                year: "2026",
+                rating: "⭐ 4.5/5",
+                subtitle: "An Eccentric, Beautifully Acted Tale of Loneliness And Custom Craft",
+                summary: "Olivia Colman shines in this delightfully strange and moving comedy about a fisherwoman who commissions a husband made entirely of wicker.",
+                poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800",
+                body: `<p>&lsquo;Wicker&rsquo; is based on a fable by Ursula Mills and has a wonderfully strange premise. While it tells an engaging and interesting story, it also cleverly weaves in social satire through its plot. This is a film that slowly pulls you in. The film initially unsettles you with the relentless taunts the fisherwoman has to endure, but once the wicker man enters her life, it wins you over with its charm. You gradually become invested in the lives of the villagers with each character endowed with distinct quirks and traits. This is a film that&rsquo;s also wickedly funny, and moving all at the same time. Wonderful performances by the cast only add to the viewing pleasure. It&rsquo;s a film that dares to be different and transforms a bizarre story into a pleasantly refreshing watch.</p>
+                <p>Set in the medieval era in a small seaside farming village where everyone is known by their trade, the film follows a fisherwoman (Olivia Colman) who is mocked for her smell, her independence and the fact that she is unmarried. The tailor&rsquo;s wife (Elizabeth Debicki) and other village women seem to take particular pleasure in making her feel like an outsider. After years of putting up with their taunts, she approaches the local basketmaker (Peter Dinklage) and asks him to weave her a husband out of wicker. He fulfils her request, giving her a companion (Alexander Skarsgård) who is affectionate, attentive and eager to make her happy. For the first time, the fisherwoman feels wanted. Curious villagers gather outside her cottage, and their interest soon gives way to envy. The husbands become defensive, while their wives wonder why their own partners cannot be as attentive. The fisherwoman&rsquo;s newfound happiness soon becomes a problem for the rest of the village, where husbands and wives begin to question what they have come to accept in their own marriages.</p>
+                <p>Much of the humour in the film comes from the villagers&rsquo; hypocrisy. They have spent years ridiculing a woman for living as a non-conformist, only to become uncomfortable when she finds something they may be missing themselves. Her wicker husband is hardly the problem. What unsettles them the most is the fact that he treats her with the affection and care that their own marriages seem to lack. The film conveys this element through village gossip, jealousy and petty arguments. Its bawdy humour is balanced by moments of tenderness. The story occasionally spells out what is already clear, but its observations about marriage and social conformity remain sharp. It is amusing to watch people who have no interest in someone else&rsquo;s happiness suddenly become experts on how that person should live. The film also comments on women who chose not to follow society&rsquo;s diktats.</p>
+                <p>Olivia Colman delivers a fabulous performance as the fisherwoman and brings a convincing mix of bitterness, defiance and vulnerability to the role. She never asks the audience to feel sorry for her, which makes the character&rsquo;s happiness all the more satisfying. Alexander Skarsgård gives the wicker husband warmth and a sense of care, making him something more than a curious creation. Their relationship feels genuine despite the bizarre premise, and the two actors make an appealing pair. Peter Dinklage brings a dry sense of humour to the basketmaker, who seems to understand the trouble his work might cause.</p>
+                <p>Elizabeth Debicki is equally effective as the tailor&rsquo;s wife, capturing her jealousy and controlling nature without turning her into a caricature. Kiell Smith-Bynoe as the innkeeper and the rest of the supporting cast round out the village dynamics brilliantly, making this whimsical tale resonate on a deeply human level.</p>`
+            }
+        };
+
+        let activeCategory = 'all';
+
+        function getStoredReviews() {
+            let saved = localStorage.getItem('streamverse_live_v1');
+            let parsed = null;
+            try {
+                if (saved) parsed = JSON.parse(saved);
+            } catch (e) {
+                parsed = null;
+            }
+
+            if (!parsed || Object.keys(parsed).length === 0) {
+                localStorage.setItem('streamverse_live_v1', JSON.stringify(defaultReviews));
+                return defaultReviews;
+            }
+            return parsed;
+        }
+
+        function setCategoryFilter(category) {
+            activeCategory = category;
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.className = "category-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-slate-700 cursor-pointer";
+            });
+            const activeTabBtn = document.getElementById(`tab-${category}`);
+            if (activeTabBtn) {
+                activeTabBtn.className = "category-tab active-tab px-4 py-2 rounded-xl text-xs font-bold transition-all border border-brand-cyan/40 bg-brand-cyan text-slate-950 shadow-md cursor-pointer";
+            }
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const reviews = getStoredReviews();
+            const keys = Object.keys(reviews);
+            if (keys.length === 0) return;
+
+            const heroKey = keys[0];
+            const hero = reviews[heroKey];
+            document.getElementById('heroTitle').innerText = hero.title || '';
+            document.getElementById('heroSubtitle').innerText = hero.subtitle || '';
+            document.getElementById('heroPoster').src = hero.poster || '';
+            document.getElementById('heroRating').innerText = hero.rating || '';
+            document.getElementById('heroBtn').setAttribute('onclick', `openReview('${heroKey}')`);
+
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = '';
+
+            let matchesCount = 0;
+
+            keys.forEach(key => {
+                const item = reviews[key];
+                const categoryMatch = (activeCategory === 'all' || item.category === activeCategory);
+
+                if (categoryMatch) {
+                    matchesCount++;
+                    const card = `
+                        <div onclick="openReview('${key}')" class="group bg-slate-900 rounded-3xl border border-slate-800/80 overflow-hidden hover:border-brand-cyan/50 transition-all duration-300 cursor-pointer flex flex-col shadow-xl">
+                            <div class="relative aspect-video overflow-hidden bg-slate-900">
+                                <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-extrabold text-amber-400 flex items-center gap-1.5 shadow-lg">
+                                    ${item.rating}
+                                </div>
+                                <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md border border-slate-800 px-2.5 py-1 rounded-lg text-[10px] font-extrabold text-brand-cyan uppercase tracking-wider">
+                                    ${item.category || 'Films'}
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
+                                <div>
+                                    <div class="flex items-center gap-2 text-xs font-semibold text-brand-cyan mb-2">
+                                        <span>${item.genre}</span>
+                                        <span>•</span>
+                                        <span>${item.year}</span>
+                                    </div>
+                                    <h3 class="font-syne font-bold text-xl text-white group-hover:text-brand-neon transition-colors leading-snug">${item.title}</h3>
+                                    <p class="text-slate-400 text-xs mt-2 line-clamp-2">${item.summary}</p>
+                                </div>
+                                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-bold text-slate-300">
+                                    <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-brand-cyan"></i> Critique</span>
+                                    <span class="text-brand-cyan group-hover:translate-x-1 transition-transform flex items-center gap-1">Read Review <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                }
+            });
+
+            if (matchesCount === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-slate-500 space-y-3">
+                        <i class="fa-solid fa-folder-open text-3xl text-slate-600"></i>
+                        <p class="text-sm font-semibold">No reviews published under "${activeCategory}" yet.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function switchView(viewName) {
+            document.getElementById('landingView').classList.add('hidden');
+            document.getElementById('reviewView').classList.add('hidden');
+            if (viewName === 'landing') {
+                renderGrid();
+                document.getElementById('landingView').classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openReview(key) {
+            const reviews = getStoredReviews();
+            const data = reviews[key];
+            if (!data) return;
+
+            document.getElementById('reviewTitle').innerText = data.title;
+            document.getElementById('reviewCategory').innerText = data.category || 'Films';
+            document.getElementById('reviewAuthor').innerText = data.author || 'StreamVerse Editor';
+            document.getElementById('reviewGenre').innerText = data.genre;
+            document.getElementById('reviewYear').innerText = data.year;
+            document.getElementById('reviewRatingScore').innerText = data.rating;
+            document.getElementById('reviewSubtitle').innerText = data.subtitle;
+            document.getElementById('reviewSummaryText').innerText = data.summary;
+            document.getElementById('reviewPoster').src = data.poster;
+            document.getElementById('reviewBodyContent').innerHTML = data.body;
+
+            document.getElementById('landingView').classList.add('hidden');
+            document.getElementById('reviewView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        renderGrid();
+    </script>
+</body>
+</html>
