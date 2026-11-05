@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "reviews"
+    label: "Reviews"
+    folder: "content/reviews"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Category", name: "category", widget: "select", options: ["Films", "Series", "Documentaries", "Videos"]}
+      - {label: "Author", name: "author", widget: "string", default: "StreamVerse Editor"}
+      - {label: "Genre", name: "genre", widget: "string"}
+      - {label: "Year", name: "year", widget: "string"}
+      - {label: "Rating", name: "rating", widget: "string"}
+      - {label: "Subtitle", name: "subtitle", widget: "string"}
+      - {label: "Summary", name: "summary", widget: "text"}
+      - {label: "Poster Image", name: "poster", widget: "image"}
+      - {label: "Full Review Body", name: "body", widget: "markdown"}
